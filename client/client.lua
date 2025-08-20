@@ -1,44 +1,55 @@
 -----------------------
 ----   Variables   ----
 -----------------------
+
 local QBCore = exports['qb-core']:GetCoreObject()
 
-local scenes = {}
+local scenes        = {}
 local closestScenes = {}
 
 local creationLaser = false
 local deletionLaser = false
 
+
 -----------------------
-----   Threads     ----
+----    Threads    ----
 -----------------------
 
+-- Find closest scenes every second
 CreateThread(function()
     while true do
         closestScenes = {}
-        for i=1, #scenes do
+
+        local plyPosition = GetEntityCoords(PlayerPedId())
+
+        for i = 1, #scenes do
             local currentScene = scenes[i]
-            local plyPosition = GetEntityCoords(PlayerPedId())
             local distance = #(plyPosition - currentScene.coords)
+
             if distance < Config.MaxPlacementDistance then
-                closestScenes[#closestScenes+1] = currentScene
+                closestScenes[#closestScenes + 1] = currentScene
             end
         end
+
         Wait(1000)
     end
 end)
 
+-- Draw closest scenes on screen
 CreateThread(function()
     while true do
         local wait = 1000
+
         if #closestScenes > 0 then
             wait = 0
-            for i=1, #closestScenes do
+            local plyPosition = GetEntityCoords(PlayerPedId())
+
+            for i = 1, #closestScenes do
                 local currentScene = closestScenes[i]
-                local plyPosition = GetEntityCoords(PlayerPedId())
                 local distance = #(plyPosition - currentScene.coords)
+
                 if distance <= currentScene.viewdistance then
-                    DrawScene(closestScenes[i])
+                    DrawScene(currentScene)
                 end
             end
         end
@@ -47,39 +58,40 @@ CreateThread(function()
     end
 end)
 
+
 -----------------------
 ---- Client Events ----
 -----------------------
 
-RegisterCommand('lagscene', function()
+RegisterCommand("lagscene", function()
     OpenMenu()
     TriggerServerEvent("InteractSound_SV:PlayOnSource", "monkeyopening", 0.05)
 end, false)
 
-RegisterCommand('slettscene', function()
+RegisterCommand("slettscene", function()
     ToggleDeletionLaser()
 end, false)
 
-RegisterNUICallback('CloseMenu', function(_, cb)
+RegisterNUICallback("CloseMenu", function(_, cb)
     CloseMenu()
     TriggerServerEvent("InteractSound_SV:PlayOnSource", "catclosing", 0.05)
-    cb('ok')
+    cb("ok")
 end)
 
-RegisterNUICallback('DeleteLaser', function(_, cb)
+RegisterNUICallback("DeleteLaser", function(_, cb)
     CloseMenu()
     ToggleDeletionLaser()
-    cb('ok')
+    cb("ok")
 end)
 
-RegisterNUICallback('CreateScene', function(data, cb)
+RegisterNUICallback("CreateScene", function(data, cb)
     creationLaser = false
     Wait(100)
     ToggleCreationLaser(data)
-    cb('ok')
+    cb("ok")
 end)
 
-RegisterNetEvent('qb-scenes:client:UpdateAllScenes', function(list)
+RegisterNetEvent("qb-scenes:client:UpdateAllScenes", function(list)
     scenes = list
 end)
 
@@ -87,25 +99,26 @@ RegisterNetEvent("QBCore:Client:OnPlayerLoaded", function()
     GetScenes()
 end)
 
-AddEventHandler('onResourceStart', function(resourceName)
+AddEventHandler("onResourceStart", function(resourceName)
     if resourceName == GetCurrentResourceName() then
         GetScenes()
     end
 end)
+
 
 -----------------------
 ----   Functions   ----
 -----------------------
 
 function GetScenes()
-    QBCore.Functions.TriggerCallback('qb-scenes:server:GetScenes', function(list)
+    QBCore.Functions.TriggerCallback("qb-scenes:server:GetScenes", function(list)
         scenes = list
     end)
 end
 
 function OpenMenu()
     SetNuiFocus(true, true)
-    SendNUIMessage({ action = "open"})
+    SendNUIMessage({ action = "open" })
 end
 
 function CloseMenu()
@@ -119,19 +132,23 @@ function ToggleCreationLaser(data)
     if creationLaser then
         CreateThread(function()
             while creationLaser do
-                local hit, coords = DrawLaser('TRYKK ~g~E~w~ FOR Å PLASSERE SCENE\nTRYKK ~g~G~w~ FOR Å REDIGERE SCENE', {r = 2, g = 241, b = 181, a = 200})
+                local hit, coords = DrawLaser(
+                    "TRYKK ~g~E~w~ FOR Å PLASSERE SCENE\nTRYKK ~g~G~w~ FOR Å REDIGERE SCENE",
+                    { r = 2, g = 241, b = 181, a = 200 }
+                )
 
                 data.coords = coords
                 DrawScene(data)
 
-                if IsControlJustReleased(0, 38) then
+                if IsControlJustReleased(0, 38) then -- E
                     creationLaser = false
                     if hit then
-                        TriggerServerEvent('qb-scenes:server:CreateScene', data)
+                        TriggerServerEvent("qb-scenes:server:CreateScene", data)
                     else
                         QBCore.Functions.Notify(Lang:t("notify.laser_error"), "error")
                     end
-                elseif IsControlJustReleased(0, 47) then
+
+                elseif IsControlJustReleased(0, 47) then -- G
                     creationLaser = false
                     OpenMenu()
                 end
@@ -149,16 +166,20 @@ function ToggleDeletionLaser()
     if deletionLaser then
         CreateThread(function()
             while deletionLaser do
-                local hit, coords = DrawLaser('TRYKK ~r~E~w~ FOR Å SLETTE SCENE\nTRYKK ~r~G~w~ FOR Å AVBRYTE', {r = 255, g = 0, b = 0, a = 200})
+                local hit, coords = DrawLaser(
+                    "TRYKK ~r~E~w~ FOR Å SLETTE SCENE\nTRYKK ~r~G~w~ FOR Å AVBRYTE",
+                    { r = 255, g = 0, b = 0, a = 200 }
+                )
 
-                if IsControlJustReleased(0, 38) then
+                if IsControlJustReleased(0, 38) then -- E
                     deletionLaser = false
                     if hit then
                         DeleteScene(coords)
                     else
                         QBCore.Functions.Notify(Lang:t("notify.laser_error"), "error")
                     end
-                elseif IsControlJustReleased(0, 47) then
+
+                elseif IsControlJustReleased(0, 47) then -- G
                     deletionLaser = false
                 end
 
@@ -169,20 +190,22 @@ function ToggleDeletionLaser()
 end
 
 function DeleteScene(coords)
-    local closestScene = nil
+    local closestScene     = nil
     local shortestDistance = nil
-    for i=1,#scenes do
+
+    for i = 1, #scenes do
         local currentScene = scenes[i]
-        local distance =  #(coords - currentScene.coords)
+        local distance     = #(coords - currentScene.coords)
+
         if distance < 1 and (shortestDistance == nil or distance < shortestDistance) then
-            closestScene = currentScene.id
+            closestScene     = currentScene.id
             shortestDistance = distance
         end
     end
 
     if closestScene then
         QBCore.Functions.Notify(Lang:t("notify.scene_delete"), "success")
-        TriggerServerEvent('qb-scenes:server:DeleteScene', closestScene)
+        TriggerServerEvent("qb-scenes:server:DeleteScene", closestScene)
     else
         QBCore.Functions.Notify(Lang:t("notify.scene_error"), "error")
     end
@@ -190,25 +213,39 @@ end
 
 function DrawLaser(message, color)
     local hit, coords = RayCastGamePlayCamera(Config.MaxPlacementDistance)
-    Draw2DText(message, 4, {255, 255, 255}, 0.4, 0.43, 0.888 + 0.025)
+
+    Draw2DText(message, 4, { 255, 255, 255 }, 0.4, 0.43, 0.888 + 0.025)
 
     if hit then
         local position = GetEntityCoords(PlayerPedId())
+
         DrawLine(position.x, position.y, position.z, coords.x, coords.y, coords.z, color.r, color.g, color.b, color.a)
-        DrawMarker(28, coords.x, coords.y, coords.z, 0.0, 0.0, 0.0, 0.0, 180.0, 0.0, 0.1, 0.1, 0.1, color.r, color.g, color.b, color.a, false, true, 2, nil, nil, false)
+        DrawMarker(
+            28, coords.x, coords.y, coords.z,
+            0.0, 0.0, 0.0,
+            0.0, 180.0, 0.0,
+            0.1, 0.1, 0.1,
+            color.r, color.g, color.b, color.a,
+            false, true, 2, nil, nil, false
+        )
     end
 
     return hit, coords
 end
 
 function DrawScene(currentScene)
-    local onScreen, screenX, screenY = World3dToScreen2d(currentScene.coords.x, currentScene.coords.y, currentScene.coords.z)
+    local onScreen, screenX, screenY = World3dToScreen2d(
+        currentScene.coords.x,
+        currentScene.coords.y,
+        currentScene.coords.z
+    )
+
     if onScreen then
         local camCoords = GetGameplayCamCoords()
-        local distance = #(currentScene.coords - camCoords)
-        local fov = (1 / GetGameplayCamFov()) * 75
-        local scale = (1 / distance) * (4) * fov * (currentScene.fontsize)
-        local r,g,b=rgbToHex(currentScene.color)
+        local distance  = #(currentScene.coords - camCoords)
+        local fov       = (1 / GetGameplayCamFov()) * 75
+        local scale     = (1 / distance) * 4 * fov * currentScene.fontsize
+        local r, g, b   = rgbToHex(currentScene.color)
 
         SetTextScale(0.0, scale)
         SetTextFont(currentScene.fontstyle)
