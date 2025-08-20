@@ -29,7 +29,3 @@ Scenes lar deg plassere drawtext hvor som helst i verden via en NUI-meny og lase
 ## Lisens
 
 [GNU GPL v3](http://www.gnu.org/licenses/gpl-3.0.html)
-
----
-
-Vil du jeg også skal strippe bort bildene og videoeksempelet helt, så det blir enda mer minimalistisk?
