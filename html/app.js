@@ -10,7 +10,7 @@ const app = Vue.createApp({
 		const color = ref('#ffffff')
 		const fontsize = ref(0.3)
 		const fontstyle = ref('1')
-		const expiration = ref('1 hour')
+		const expiration = ref('1 time')
 
 		return {
 			text,
@@ -19,14 +19,14 @@ const app = Vue.createApp({
 			fontsize,
 			fontstyle,
 			expiration,
-			expirationOptions: ['1 hour', '2 hours', '4 hours', '8 hours', '24 hours', '48 hours', '72 hours'],
+			expirationOptions: ['1 time', '2 timer', '4 timer', '8 timer', '1 dag', '2 dager', '3 dager'],
 			onSubmit() {
 				if (color.value === null | viewdistance.value === null | text.value === null | fontsize.value === null) {
 					$q.notify({
 						color: 'red-5',
 						textColor: 'white',
 						icon: 'warning',
-						message: 'You need to complete all inputs.'
+						message: 'Du må fylle ut alle inndata.'
 					})
 				}
 				else {
@@ -56,7 +56,7 @@ const app = Vue.createApp({
 			onReset() {
 				text.value = null
 				color.value = '#ffffff'
-				expiration.value = '1 hour'
+				expiration.value = '1 time'
 				viewdistance.value = 5
 				fontsize.value = 0.3
 				fontstyle.value = 1

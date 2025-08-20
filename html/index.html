@@ -12,19 +12,19 @@
 
 <body>
 	<div id="openmenu">
-		<div class="row justify-center" id='title'><img class="brand-logo" src="./brand-logo.svg"></img></div>
+		<div class="row justify-center" id='title'></div>
 		<div id="menu">
 			<div class="q-mb-md">
 				<q-form @submit="onSubmit" class="q-gutter-md">
-					<q-input dark hint="Markdown supported (i.e. &lt;b>, &lt;i>)" type="textarea" rows="1"
-						v-model="text" class="text" color="field" v-model="text" label="Text">
+					<q-input dark hint="Markdown support (i.e. &lt;b>, &lt;i>)" type="textarea" rows="1"
+						v-model="text" class="text" color="field" v-model="text" label="Tekst">
 						<template v-slot:prepend>
 							<q-icon name="create"/>
 						</template>
 					</q-input>
 
-					<q-input dark hint="Text Color" v-model="color" class="my-input"
-						color="field" label="Color">
+					<q-input dark hint="Fargepalett" v-model="color" class="my-input"
+						color="field" label="Tekstfarge">
 						<template v-slot:prepend>
 							<q-icon name="palette"/>
 						</template>
@@ -46,9 +46,9 @@
 						</q-item-section>
 
 					</q-item>
-					<q-item-label class="slidertext">Font Size</q-item-label>
+					<q-item-label class="slidertext">Tekststørrelse</q-item-label>
 
-					<q-item class="slideritem">
+					<!-- <q-item class="slideritem">
 						<q-item-section avatar>
 							<q-icon color="slider" name="title"/>
 						</q-item-section>
@@ -56,31 +56,31 @@
 							<q-slider dark label-always v-model="fontstyle" :min="1" :max="5" label color="sliderb"/>
 						</q-item-section>
 					</q-item>
-					<q-item-label class="slidertext">Font style</q-item-label>
+					<q-item-label class="slidertext">Tekstfont</q-item-label> -->
 
 					<q-item class="slideritem">
 						<q-item-section avatar>
 							<q-icon color="slider" name="social_distance"/>
 						</q-item-section>
 						<q-item-section>
-							<q-slider dark label-always v-model="viewdistance" :min="1" :max="25" label color="sliderb" />
+							<q-slider dark label-always v-model="viewdistance" :min="1" :max="10" label color="sliderb" />
 						</q-item-section>
 					</q-item>
-					<q-item-label class="slidertext">View Distance</q-item-label>
+					<q-item-label class="slidertext">Visningsavstand</q-item-label>
 
-					<q-select hint="Expiration Time" dark v-model="expiration" :options="expirationOptions" color="field"
-						label="Expiration Time">
+					<q-select hint="Utløpstid" dark v-model="expiration" :options="expirationOptions" color="field"
+						label="Utløpstid">
 						<template v-slot:prepend>
 							<q-icon name="schedule"/>
 						</template>
 					</q-select>
 
 					<div class="row justify-center">
-						<q-btn style="margin-right: 1vh;" class="Close" label="Create" type="submit" text-color="black"
+						<q-btn style="margin-right: 1vh;" class="Close" label="Bekreft" type="submit" text-color="black"
 							color="button"></q-btn>
-						<q-btn v-on:click="onDelete()" style="margin-right: 1vh;" class="delete" label="Delete"
+						<q-btn v-on:click="onDelete()" style="margin-right: 1vh;" class="delete" label="Slett"
 							text-color="black" color="buttondel"></q-btn>
-						<q-btn v-on:click="onReset()" style="margin-right: 1vh;" class="cancel" label="Reset"
+						<q-btn v-on:click="onReset()" style="margin-right: 1vh;" class="cancel" label="Nullstill"
 							text-color="black" color="buttonreset"></q-btn>
 					</div>
 				</q-form>

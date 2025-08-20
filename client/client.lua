@@ -51,15 +51,15 @@ end)
 ---- Client Events ----
 -----------------------
 
-RegisterKeyMapping('createscene', 'Create Scene', 'keyboard', Config.CreateSceneKey)
-RegisterKeyMapping('deletescene', 'Delete Scene', 'keyboard', Config.DeleteSceneKey)
+--RegisterKeyMapping('createscene', 'Create Scene', 'keyboard', Config.CreateSceneKey)
+--RegisterKeyMapping('deletescene', 'Delete Scene', 'keyboard', Config.DeleteSceneKey)
 
-RegisterCommand('createscene', function()
+RegisterCommand('lagscene', function()
     OpenMenu()
     TriggerServerEvent("InteractSound_SV:PlayOnSource", "monkeyopening", 0.05)
 end, false)
 
-RegisterCommand('deletescene', function()
+RegisterCommand('slettscene', function()
     ToggleDeletionLaser()
 end, false)
 
@@ -122,7 +122,7 @@ function ToggleCreationLaser(data)
     if creationLaser then
         CreateThread(function()
             while creationLaser do
-                local hit, coords = DrawLaser('PRESS ~g~E~w~ TO PLACE SCENE\nPRESS ~g~G~w~ TO EDIT SCENE', {r = 2, g = 241, b = 181, a = 200})
+                local hit, coords = DrawLaser('TRYKK ~g~E~w~ FOR Å PLASSERE SCENE\nTRYKK ~g~G~w~ FOR Å REDIGERE SCENE', {r = 2, g = 241, b = 181, a = 200})
 
                 data.coords = coords
                 DrawScene(data)
@@ -152,7 +152,7 @@ function ToggleDeletionLaser()
     if deletionLaser then
         CreateThread(function()
             while deletionLaser do
-                local hit, coords = DrawLaser('PRESS ~r~E~w~ TO DELETE A SCENE\nPRESS ~r~G~w~ TO CANCEL', {r = 255, g = 0, b = 0, a = 200})
+                local hit, coords = DrawLaser('TRYKK ~r~E~w~ FOR Å SLETTE SCENE\nTRYKK ~r~G~w~ FOR Å AVBRYTE', {r = 255, g = 0, b = 0, a = 200})
 
                 if IsControlJustReleased(0, 38) then
                     deletionLaser = false
