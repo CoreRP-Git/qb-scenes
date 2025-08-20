@@ -1,10 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
 
-.text-field { color: rgb(220 20 60)!important; }
-.text-sliderb { color: rgb(220 20 60)!important; }
+.text-field { color: rgb(241, 229, 66)!important; }
+.text-sliderb { color: rgb(241, 229, 66)!important; }
 .text-slider { color: #ffffffb3!important; }
 .bg-button { background: #70f145!important; }
-.bg-buttondel { background: rgb(220 20 60)!important; }
+.bg-buttondel { background: rgb(241, 229, 66)!important; }
 .bg-buttonreset { background: rgb(106, 106, 106)!important; }
 input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none!important; margin: 0; }
 div#q-loading-bar { display: none!important; }
