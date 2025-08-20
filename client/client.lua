@@ -51,9 +51,6 @@ end)
 ---- Client Events ----
 -----------------------
 
---RegisterKeyMapping('createscene', 'Create Scene', 'keyboard', Config.CreateSceneKey)
---RegisterKeyMapping('deletescene', 'Delete Scene', 'keyboard', Config.DeleteSceneKey)
-
 RegisterCommand('lagscene', function()
     OpenMenu()
     TriggerServerEvent("InteractSound_SV:PlayOnSource", "monkeyopening", 0.05)
