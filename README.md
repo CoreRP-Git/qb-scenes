@@ -1,10 +1,4 @@
-Perfekt 👍 Da lager jeg en kort, ryddig versjon uten masse unødvendige detaljer, TODOs og lange changelogs. Bare det viktige + kreditering.
-
-Her er en strippet og ren README:
-
----
-
-# QBCore Scenes
+# QBOX Scenes
 
 Scenes lar deg plassere drawtext hvor som helst i verden via en NUI-meny og laserpeker. Teksten kan inneholde emojis, være flersidig og støtter markdown. Du kan forhåndsvise og redigere scener før plassering.
 
