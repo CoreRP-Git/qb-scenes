@@ -1,7 +1,3 @@
------------------------
-----   Variables   ----
------------------------
-
 local QBCore = exports['qb-core']:GetCoreObject()
 
 local scenes        = {}
@@ -11,15 +7,10 @@ local creationLaser = false
 local deletionLaser = false
 
 
------------------------
-----    Threads    ----
------------------------
-
--- Find closest scenes every second
+-- Finn nærmeste scener hvert sekund
 CreateThread(function()
     while true do
         closestScenes = {}
-
         local plyPosition = GetEntityCoords(PlayerPedId())
 
         for i = 1, #scenes do
@@ -35,7 +26,7 @@ CreateThread(function()
     end
 end)
 
--- Draw closest scenes on screen
+-- Tegn nærmeste scener på skjermen
 CreateThread(function()
     while true do
         local wait = 1000
@@ -59,10 +50,7 @@ CreateThread(function()
 end)
 
 
------------------------
----- Client Events ----
------------------------
-
+-- Kommandoer
 RegisterCommand("lagscene", function()
     OpenMenu()
     TriggerServerEvent("InteractSound_SV:PlayOnSource", "monkeyopening", 0.05)
@@ -72,6 +60,8 @@ RegisterCommand("slettscene", function()
     ToggleDeletionLaser()
 end, false)
 
+
+-- NUI callbacks
 RegisterNUICallback("CloseMenu", function(_, cb)
     CloseMenu()
     TriggerServerEvent("InteractSound_SV:PlayOnSource", "catclosing", 0.05)
@@ -91,7 +81,9 @@ RegisterNUICallback("CreateScene", function(data, cb)
     cb("ok")
 end)
 
-RegisterNetEvent("qb-scenes:client:UpdateAllScenes", function(list)
+
+-- Client events
+RegisterNetEvent("qbx_scenes:client:UpdateAllScenes", function(list)
     scenes = list
 end)
 
@@ -106,12 +98,9 @@ AddEventHandler("onResourceStart", function(resourceName)
 end)
 
 
------------------------
-----   Functions   ----
------------------------
-
+-- Funksjoner
 function GetScenes()
-    QBCore.Functions.TriggerCallback("qb-scenes:server:GetScenes", function(list)
+    QBCore.Functions.TriggerCallback("qbx_scenes:server:GetScenes", function(list)
         scenes = list
     end)
 end
@@ -143,7 +132,7 @@ function ToggleCreationLaser(data)
                 if IsControlJustReleased(0, 38) then -- E
                     creationLaser = false
                     if hit then
-                        TriggerServerEvent("qb-scenes:server:CreateScene", data)
+                        TriggerServerEvent("qbx_scenes:server:CreateScene", data)
                     else
                         QBCore.Functions.Notify(Lang:t("notify.laser_error"), "error")
                     end
@@ -205,7 +194,7 @@ function DeleteScene(coords)
 
     if closestScene then
         QBCore.Functions.Notify(Lang:t("notify.scene_delete"), "success")
-        TriggerServerEvent("qb-scenes:server:DeleteScene", closestScene)
+        TriggerServerEvent("qbx_scenes:server:DeleteScene", closestScene)
     else
         QBCore.Functions.Notify(Lang:t("notify.scene_error"), "error")
     end
@@ -213,8 +202,7 @@ end
 
 function DrawLaser(message, color)
     local hit, coords = RayCastGamePlayCamera(Config.MaxPlacementDistance)
-
-    Draw2DText(message, 4, { 255, 255, 255 }, 0.4, 0.43, 0.888 + 0.025)
+    Draw2DText(message, 4, { 255, 255, 255 }, 0.4, 0.43, 0.913)
 
     if hit then
         local position = GetEntityCoords(PlayerPedId())
