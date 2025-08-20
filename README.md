@@ -18,8 +18,7 @@ Scenes lar deg plassere drawtext hvor som helst i verden via en NUI-meny og lase
 
 ## Eksempel
 
-![Interface](https://i.imgur.com/MfbG070.png)
-[Video Eksempel](https://i.imgur.com/jfTlu9B.mp4)
+![Interface](https://files.fivemerr.com/images/b2ef5f4b-cab0-478b-a99d-80186f622979.png)
 
 ## Kreditering
 
