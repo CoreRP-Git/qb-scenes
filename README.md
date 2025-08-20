@@ -18,7 +18,7 @@ Scenes lar deg plassere drawtext hvor som helst i verden via en NUI-meny og lase
 
 ## Eksempel
 
-![Interface](https://files.fivemerr.com/images/b2ef5f4b-cab0-478b-a99d-80186f622979.png)
+![Interface](https://files.fivemerr.com/images/077ae227-ecee-47c3-afb3-84c6396951df.png)
 
 ## ToDo 
 Bytte logging om til noe annet enn discord webhook 😠 xD (#Møkk)
